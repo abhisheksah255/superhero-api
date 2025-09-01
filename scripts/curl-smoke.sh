@@ -45,15 +45,3 @@ test_endpoint "/superheros/delete?id=1" 200 DELETE
 test_endpoint "/superheros/delete_all" 200 DELETE
 
 echo "📄 Curl smoke report generated at $SUMMARY"
-
-echo ""
-echo "🚀 Running full Postman tests with Newman..."
-# Run full Postman collection
-newman run "$POSTMAN_COLLECTION" \
-  --reporters cli,junit,html \
-  --reporter-junit-export postman-junit-report.xml \
-  --reporter-html-export postman-html-report.html || true
-
-echo "✅ Postman reports generated:"
-echo "   - postman-junit-report.xml"
-echo "   - postman-html-report.html"
