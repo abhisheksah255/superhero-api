@@ -18,40 +18,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y curl jq
+
       - name: Make scripts executable
         run: chmod +x scripts/smoke.sh
 
       - name: Run API Smoke Tests
         id: smoke
-        run: ./scripts/smoke.sh > ${{ env.OUT_SUMMARY }}
-
-      - name: Generate JUnit XML
-        run: |
-          cat > ${{ env.OUT_JUNIT }} <<'EOF'
-          <?xml version="1.0" encoding="UTF-8"?>
-          <testsuites>
-            <testsuite name="API Smoke Tests" tests="8" failures="5" errors="0" skipped="0" time="0">
-              <testcase name="home" classname="API">
-                <failure message="Expected 200 but got 400">Response code mismatch</failure>
-              </testcase>
-              <testcase name="refresh_data" classname="API">
-                <failure message="Expected 200|400 but got 400">Response not in expected set</failure>
-              </testcase>
-              <testcase name="search_heroes" classname="API"/>
-              <testcase name="add_new_hero" classname="API">
-                <failure message="Expected 204|400 but got 400">Unexpected status code</failure>
-              </testcase>
-              <testcase name="update_hero" classname="API"/>
-              <testcase name="delete_hero" classname="API"/>
-              <testcase name="delete_all_heroes" classname="API">
-                <failure message="Expected 200|404 but got 400">Unexpected status code</failure>
-              </testcase>
-              <testcase name="get_all_heroes" classname="API">
-                <failure message="Expected 200 but got 400">Response code mismatch</failure>
-              </testcase>
-            </testsuite>
-          </testsuites>
-          EOF
+        run: ./scripts/smoke.sh
 
       - name: Publish Test Report
         if: always()
