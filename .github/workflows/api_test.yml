@@ -1,0 +1,43 @@
+name: API Smoke Test
+
+on:
+  push:
+    branches: [ main ,master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    env:
+      BASE_URL: https://superhero-api-b6u9.onrender.com
+      ENDPOINTS_FILE: endpoints.csv
+      OUT_JUNIT: smoke-report.xml
+      OUT_SUMMARY: smoke-summary.md
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Make scripts executable
+        run: chmod +x scripts/smoke.sh
+
+      - name: Run API Smoke Tests
+        id: smoke
+        run: ./scripts/smoke.sh
+
+      - name: Publish Test Report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: API Smoke
+          path: ${{ env.OUT_JUNIT }}
+          reporter: java-junit
+
+      - name: Upload Reports as Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-smoke-artifacts
+          path: |
+            ${{ env.OUT_JUNIT }}
+            ${{ env.OUT_SUMMARY }}
