@@ -80,6 +80,8 @@ jobs:
           name: python-report
           path: python-report.txt
           overwrite: true
+          include-hidden-files: true
+
 
       ##################################################
       # 4. WORKFLOW SUMMARY
