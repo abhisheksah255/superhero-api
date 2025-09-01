@@ -1,0 +1,152 @@
+{
+  "info": {
+    "name": "Superhero API Tests",
+    "_postman_id": "12345678-abcd-efgh-ijkl-987654321000",
+    "description": "Postman collection for testing Superhero API endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Home",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get All Heroes",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros"]
+        }
+      }
+    },
+    {
+      "name": "Refresh Heroes",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros/refresh",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros", "refresh"]
+        }
+      }
+    },
+    {
+      "name": "Search Hero by ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros/search?id=1",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros", "search"],
+          "query": [
+            { "key": "id", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Search Hero by Name",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros/search?name=Superman",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros", "search"],
+          "query": [
+            { "key": "name", "value": "Superman" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Add New Hero",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Superman\",\n  \"realName\": \"Clark Kent\",\n  \"franchise\": \"DC\"\n}"
+        },
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros/add_hero",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros", "add_hero"]
+        }
+      }
+    },
+    {
+      "name": "Update Hero",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Superman\",\n  \"realName\": \"Kal-El\",\n  \"franchise\": \"DC\"\n}"
+        },
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros/update_hero/1",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros", "update_hero", "1"]
+        }
+      }
+    },
+    {
+      "name": "Delete Hero by ID",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros/delete?id=1",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros", "delete"],
+          "query": [
+            { "key": "id", "value": "1" }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete All Heroes",
+      "request": {
+        "method": "DELETE",
+        "url": {
+          "raw": "https://superhero-api-b6u9.onrender.com/superheros/delete_all",
+          "protocol": "https",
+          "host": ["superhero-api-b6u9", "onrender", "com"],
+          "path": ["superheros", "delete_all"]
+        }
+      }
+    }
+  ]
+}
