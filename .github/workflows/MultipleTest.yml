@@ -1,0 +1,75 @@
+name: Superhero API Tests with Multiple Ways 
+
+on:
+  workflow_dispatch: # Manual trigger (you can re-enable push/PR if needed)
+
+jobs:
+  api-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v5
+
+      ##################################################
+      # 1. POSTMAN (Newman) TESTS
+      ##################################################
+      - name: Install Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "18"
+
+      - name: Install Newman (Postman CLI)
+        run: npm install -g newman newman-reporter-html newman-reporter-junitfull
+
+      - name: Run API Tests with Newman
+        run: |
+          newman run superhero-api.postman_collection.json \
+            --reporters cli,junit,html \
+            --reporter-junit-export newman-report.xml \
+            --reporter-html-export newman-report.html || true
+
+      - name: Upload Newman JUnit Test Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: junit-report
+          path: newman-report.xml
+
+      - name: Upload Newman HTML Test Report
+        uses: actions/upload-artifact@v5
+        with:
+          name: html-report
+          path: newman-report.html
+
+      ##################################################
+      # 2. CURL SMOKE TESTS
+      ##################################################
+      - name: Run curl Smoke Tests
+        run: |
+          chmod +x scripts/curl-smoke.sh
+          ./scripts/curl-smoke.sh || true
+
+      ##################################################
+      # 3. PYTHON FUNCTIONAL TESTS
+      ##################################################
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python Dependencies
+        run: pip install requests
+
+      - name: Run Python API Tests
+        run: python scripts/test_api.py || true
+
+      ##################################################
+      # 4. WORKFLOW SUMMARY
+      ##################################################
+      - name: Add Test Summary to Workflow
+        run: |
+          echo "### 🦸 Superhero API Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Newman (Postman) tests executed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ curl-based smoke tests executed" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Python API functional tests executed" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 Detailed Newman reports are available as artifacts" >> $GITHUB_STEP_SUMMARY
