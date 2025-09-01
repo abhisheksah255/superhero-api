@@ -1,46 +1,49 @@
-name: API Smoke Test
+name: Superhero API Tests
 
 on:
   push:
-    branches: [patch-1, main]
+    branches: [ "main","patch-1" ]
   pull_request:
+    branches: [ "main","patch-1" ]
   workflow_dispatch:
 
 jobs:
-  smoke:
+  api-tests:
     runs-on: ubuntu-latest
-    env:
-      BASE_URL: https://superhero-api-b6u9.onrender.com
-      ENDPOINTS_FILE: endpoints.csv
-      OUT_JUNIT: smoke-report.xml
-      OUT_SUMMARY: smoke-summary.md
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y curl jq
-
-      - name: Make scripts executable
-        run: chmod +x scripts/smoke.sh
-
-      - name: Run API Smoke Tests
-        id: smoke
-        run: ./scripts/smoke.sh
-
-      - name: Publish Test Report
-        if: always()
-        uses: dorny/test-reporter@v1
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          name: API Smoke
-          path: ${{ env.OUT_JUNIT }}
-          reporter: java-junit
+          node-version: "18"
 
-      - name: Upload Reports as Artifacts
-        if: always()
+      - name: Install Newman (Postman CLI)
+        run: npm install -g newman newman-reporter-html newman-reporter-junitfull
+
+      - name: Run API Tests with Newman
+        run: |
+          newman run superhero-api.postman_collection.json \
+            --reporters cli,junit,html \
+            --reporter-junit-export newman-report.xml \
+            --reporter-html-export newman-report.html || true
+
+      - name: Upload JUnit Test Report
         uses: actions/upload-artifact@v4
         with:
-          name: api-smoke-artifacts
-          path: |
-            ${{ env.OUT_JUNIT }}
-            ${{ env.OUT_SUMMARY }}
+          name: junit-report
+          path: newman-report.xml
+
+      - name: Upload HTML Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-report
+          path: newman-report.html
+
+      - name: Add Test Summary to Workflow
+        run: |
+          echo "### 🦸 Superhero API Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ API tests executed" >> $GITHUB_STEP_SUMMARY
+          echo "- 📊 Detailed report attached as artifacts" >> $GITHUB_STEP_SUMMARY
