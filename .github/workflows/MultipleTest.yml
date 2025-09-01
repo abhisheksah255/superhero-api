@@ -74,11 +74,14 @@ jobs:
       - name: Run Python API Tests
         run: python scripts/test_api.py || true
 
+      - name: List files
+        run: ls -R
+
       - name: Upload Python Report
         uses: actions/upload-artifact@v4
         with:
           name: python-report
-          path: python-report.txt
+          path: python-reports.txt
           overwrite: true
           include-hidden-files: true
 
