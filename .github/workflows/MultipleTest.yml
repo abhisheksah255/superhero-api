@@ -1,10 +1,10 @@
 name: Superhero API Tests with Multiple Ways 
 
 on:
-  push:
-    branches: [ "main","patch-1" ]
-  pull_request:
-    branches: [ "main","patch-1" ]
+  # push:
+  #   branches: [ "main","patch-1" ]
+  # pull_request:
+  #   branches: [ "main","patch-1" ]
   workflow_dispatch:
  # Manual trigger (you can re-enable push/PR if needed)
 
@@ -54,6 +54,12 @@ jobs:
           chmod +x scripts/curl-smoke.sh
           ./scripts/curl-smoke.sh || true
 
+      - name: Upload curl Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: curl-report
+          path: curl-report.txt
+
       ##################################################
       # 3. PYTHON FUNCTIONAL TESTS
       ##################################################
@@ -67,6 +73,12 @@ jobs:
 
       - name: Run Python API Tests
         run: python scripts/test_api.py || true
+
+      - name: Upload Python Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-report
+          path: python-report.txt
 
       ##################################################
       # 4. WORKFLOW SUMMARY
