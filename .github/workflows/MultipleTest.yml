@@ -79,6 +79,7 @@ jobs:
         with:
           name: python-report
           path: python-report.txt
+          overwrite: true
 
       ##################################################
       # 4. WORKFLOW SUMMARY
