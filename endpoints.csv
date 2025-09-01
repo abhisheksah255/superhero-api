@@ -1,9 +1,10 @@
-# method,path,expected_codes,optional_name
-GET,/,200,home
-GET,/superheros/refresh,200|400,refresh_data
-GET,/superheros/search,200|400|404,search_heroes
-POST,/superheros/add_hero,204|400,add_new_hero
-PUT,/superheros/update_hero/1,200|400|404,update_hero   # using ID=1 as example
-DELETE,/superheros/delete?id=1,200|400|404,delete_hero  # query param example
-DELETE,/superheros/delete_all,200|404,delete_all_heroes
-GET,/superheros,200,get_all_heroes
+name,method,path,expected,body
+home,GET,/,"200",
+refresh_data,GET,/superheros/refresh,"200|400",
+search_heroes,GET,/superheros/search,"200|400|404",
+add_new_hero,POST,/superheros/add_hero,"204|400","{\"name\":\"Superman\",\"realName\":\"Clark Kent\",\"franchise\":\"DC\"}"
+update_hero,PUT,/superheros/update_hero/1,"200|400|404","{\"name\":\"Batman\",\"realName\":\"Bruce Wayne\",\"franchise\":\"DC\"}"
+delete_hero,DELETE,/superheros/delete?id=1,"200|400|404",
+delete_all_heroes,DELETE,/superheros/delete_all,"200|404",
+get_all_heroes,GET,/superheros,"200",
+
