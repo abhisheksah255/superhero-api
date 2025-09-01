@@ -1,7 +1,12 @@
 name: Superhero API Tests with Multiple Ways 
 
 on:
-  workflow_dispatch: # Manual trigger (you can re-enable push/PR if needed)
+  push:
+    branches: [ "main","patch-1" ]
+  pull_request:
+    branches: [ "main","patch-1" ]
+  workflow_dispatch:
+ # Manual trigger (you can re-enable push/PR if needed)
 
 jobs:
   api-tests:
