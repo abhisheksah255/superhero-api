@@ -14,13 +14,13 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v3
 
       ##################################################
       # 1. POSTMAN (Newman) TESTS
       ##################################################
       - name: Install Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v3
         with:
           node-version: "18"
 
@@ -35,13 +35,13 @@ jobs:
             --reporter-html-export newman-report.html || true
 
       - name: Upload Newman JUnit Test Report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: junit-report
           path: newman-report.xml
 
       - name: Upload Newman HTML Test Report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: html-report
           path: newman-report.html
