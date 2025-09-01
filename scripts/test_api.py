@@ -28,11 +28,11 @@ import sys, json, requests
 collection_file = sys.argv[1]
 out_file = sys.argv[2]
 
-
 with open(collection_file) as f:
     collection = json.load(f)
 
 results = []
+
 
 def parse_url(url_obj):
     """
@@ -49,6 +49,7 @@ def parse_url(url_obj):
         return f"{scheme}://{host}/{path}"
     return ""
 
+
 for item in collection.get("item", []):
     try:
         req = item.get("request", {})
@@ -56,9 +57,7 @@ for item in collection.get("item", []):
         method = req.get("method", "GET")
         url = parse_url(req.get("url", ""))
 
-        headers = {}
-        for h in req.get("header", []):
-            headers[h["key"]] = h["value"]
+        headers = {h["key"]: h["value"] for h in req.get("header", [])}
 
         body = None
         if "body" in req and req["body"].get("mode") == "raw":
@@ -93,11 +92,21 @@ for item in collection.get("item", []):
             "error": str(e)
         })
 
+# Write detailed JSON output
 with open(out_file, "w") as f:
     json.dump(results, f, indent=2)
-# test_api.py
+
+# Write human-readable summary
 with open("python-report.txt", "w") as f:
-    f.write("API tests completed successfully\n")
+    f.write("API Test Report\n")
+    f.write("====================\n\n")
+    for r in results:
+        if "error" in r:
+            f.write(f"❌ {r['name']} [{r['method']}] -> ERROR: {r['error']}\n")
+        else:
+            status_icon = "✅" if r["ok"] else "⚠️"
+            f.write(f"{status_icon} {r['name']} [{r['method']}] {r['url']} -> {r['status']}\n")
 
-
-print(f"✅ Finished running {len(results)} requests. Results saved to {out_file}")
+print(f"✅ Finished running {len(results)} requests.")
+print(f"📂 JSON results saved to {out_file}")
+print(f"📂 Summary report saved to python-report.txt")
