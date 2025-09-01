@@ -1,10 +1,10 @@
 name: Superhero API Tests with Multiple Ways 
 
 on:
-  # push:
-  #   branches: [ "main","patch-1" ]
-  # pull_request:
-  #   branches: [ "main","patch-1" ]
+  push:
+    branches: [ "main","patch-1" ]
+  pull_request:
+    branches: [ "main","patch-1" ]
   workflow_dispatch:
  # Manual trigger (you can re-enable push/PR if needed)
 
