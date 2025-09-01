@@ -81,7 +81,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: python-report
-          path: python-reports.txt
+          path: python-report.txt
           overwrite: true
           include-hidden-files: true
 
