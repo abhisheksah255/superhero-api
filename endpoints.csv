@@ -1,0 +1,9 @@
+# method,path,expected_codes,optional_name
+GET,/,200,home
+GET,/superheros/refresh,200|400,refresh_data
+GET,/superheros/search,200|400|404,search_heroes
+POST,/superheros/add_hero,204|400,add_new_hero
+PUT,/superheros/update_hero/1,200|400|404,update_hero   # using ID=1 as example
+DELETE,/superheros/delete?id=1,200|400|404,delete_hero  # query param example
+DELETE,/superheros/delete_all,200|404,delete_all_heroes
+GET,/superheros,200,get_all_heroes
