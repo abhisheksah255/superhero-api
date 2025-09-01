@@ -1,9 +1,9 @@
 name: API Smoke Test
 
 on:
-  push:
-    branches: [patch-1,main]
-  pull_request:
+  # push:
+  #   branches: [patch-1,main]
+  # pull_request:
   workflow_dispatch:
 
 jobs:
