@@ -96,16 +96,24 @@ for item in collection.get("item", []):
 with open(out_file, "w") as f:
     json.dump(results, f, indent=2)
 
-# Write human-readable summary
+# Write a human-readable report
 with open("python-report.txt", "w") as f:
-    f.write("API Test Report\n")
-    f.write("====================\n\n")
+    total = len(results)
+    passed = sum(1 for r in results if r.get("ok"))
+    failed = total - passed
+    f.write("Python API Test Report\n")
+    f.write("========================\n")
+    f.write(f"Total requests: {total}\n")
+    f.write(f"Passed: {passed}\n")
+    f.write(f"Failed: {failed}\n\n")
+
     for r in results:
         if "error" in r:
             f.write(f"❌ {r['name']} [{r['method']}] -> ERROR: {r['error']}\n")
         else:
             status_icon = "✅" if r["ok"] else "⚠️"
             f.write(f"{status_icon} {r['name']} [{r['method']}] {r['url']} -> {r['status']}\n")
+
 
 print(f"✅ Finished running {len(results)} requests.")
 print(f"📂 JSON results saved to {out_file}")
